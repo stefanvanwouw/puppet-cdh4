@@ -21,6 +21,26 @@ end
    <value>hadoop</value>
   </property>
 
+  <!-- Impala stuff -->
+  <property>
+   <name>dfs.client.read.shortcircuit</name>
+   <value>true</value>
+  </property>
+
+  <property>
+   <name>dfs.domain.socket.path</name>
+   <value>/var/run/hadoop-hdfs/dn._PORT</value>
+  </property>
+  <property>
+   <name>dfs.client.file-block-storage-locations.timeout</name>
+   <value>3000</value>
+  </property>
+  <property>
+   <name>dfs.datanode.hdfs-blocks-metadata.enabled</name>
+   <value>true</value>
+  </property>
+  <!-- End Impala Stuff -->
+
 <% if @ha_enabled -%>
   <property>
     <name>dfs.nameservices</name>
@@ -46,10 +66,6 @@ end
   </property>
 <% end # @namenode_hosts.each -%>
 
-  <property>
-    <name>dfs.namenode.shared.edits.dir</name>
-    <value>qjournal://<%= @journalnode_hosts.sort.join(':8485;') %>:8485/<%= @nameservice_id %></value>
-  </property>
 
   <property>
     <name>dfs.journalnode.edits.dir</name>
@@ -68,6 +84,8 @@ end
   </property>
 
 <% end # if @ha_enabled -%>
+
+
   <property>
    <name>dfs.namenode.name.dir</name>
    <value>file://<%= (dfs_name_dir.class == Array) ? dfs_name_dir.join(',file://') : dfs_name_dir %></value>
